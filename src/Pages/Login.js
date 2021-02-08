@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from "react";
 import { connect } from "react-redux";
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { changeIsLogged } from "../redux/actions";
-import { Card, Logo, Form, Input, Button, Error, LogoContainer, Checkbox, Label } from '../components/AuthForm';
+import { Card, Logo, Form, Input, Button, Error, LogoContainer, Checkbox, Label, FlexContainer, SignUpLink, Advertising } from '../components/AuthForm';
 import logoImg from "../img/padlock.png";
 
 const initialValues = {
@@ -89,9 +89,12 @@ function Login({isLoggedIn, changeIsLogged, authTokens}) {
                 </Label>
                 <Button type='submit' >Sign In</Button>
             </Form>
-            <Link to="#">Forgot password?</Link>
-            <Link to="/signup">Don't have an account? Sigh Up</Link>
+            <FlexContainer>
+                <SignUpLink to="#">Forgot password?</SignUpLink>
+                <SignUpLink to="/signup">Don't have an account? Sigh Up</SignUpLink>
+            </FlexContainer>
             { isError &&<Error>The username or password provided were incorrect!</Error> }
+            <Advertising>Copyright &#169; Your website 2020</Advertising>
         </Card>
     )
 };
@@ -100,10 +103,5 @@ const mapStateToProps = state => ({
     isLoggedIn: state.auth.isLoggedIn,
     authTokens: state.auth.authTokens
 })
-
-// const mapDispatchToProps = {
-//     changeIsLogged,
-//     addToken
-// }
 
 export default connect(mapStateToProps, {changeIsLogged})(Login);

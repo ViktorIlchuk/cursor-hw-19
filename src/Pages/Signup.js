@@ -1,6 +1,6 @@
 import React, {useState} from "react";
-import { Link, Redirect } from 'react-router-dom';
-import { Card, Logo, Form, Input, Button, Error, InputContainer, LogoContainer } from '../components/AuthForm';
+import { Redirect } from 'react-router-dom';
+import { Card, Logo, Form, Input, Button, FlexContainer, LogoContainer, SignUpLink, Advertising } from '../components/AuthForm';
 import { connect } from "react-redux";
 import { changeIsLogged, addToken } from "../redux/actions";
 import logoImg from "../img/padlock.png";
@@ -13,7 +13,6 @@ const initialValues = {
 }
 
 function Signup({isLoggedIn, changeIsLogged, addToken}) {
-  const [isError, setIsError] = useState(false);
   const [values, setValues] = useState(initialValues);
 
   const signupHandler = event => {
@@ -44,7 +43,7 @@ function Signup({isLoggedIn, changeIsLogged, addToken}) {
       </LogoContainer>
       <h2>Sign up</h2>
       <Form onSubmit={signupHandler}>
-        <InputContainer>
+        <FlexContainer>
           <Input
             name='firstName'
             type="text"
@@ -61,7 +60,7 @@ function Signup({isLoggedIn, changeIsLogged, addToken}) {
             signup
             onChange={handleInputChange}
           />
-        </InputContainer>
+        </FlexContainer>
         <Input
           name='email'
           type="email"
@@ -77,8 +76,9 @@ function Signup({isLoggedIn, changeIsLogged, addToken}) {
           onChange={handleInputChange}
         />
         <Button type='submit'>Sign Up</Button>
+        <SignUpLink to="/">Already have an account? Sign in</SignUpLink>
       </Form>
-      <Link to="/">Already have an account? Sign in</Link>
+      <Advertising>Copyright &#169; Your website 2020</Advertising>
     </Card>
   );
 }

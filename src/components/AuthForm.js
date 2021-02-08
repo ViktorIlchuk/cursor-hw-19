@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const Card = styled.div`
@@ -15,9 +16,10 @@ const Form = styled.div`
   display: flex;
   flex-direction: column;`;
 
-const InputContainer = styled.div`
+const FlexContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  width: 100%;
 `
 
 const CheckboxContainer = styled.div`
@@ -68,19 +70,44 @@ const Error = styled.div`
 `;
 
 const Checkbox = styled.input`
- background-color: black;
- border: 1px solid lightgray;
+  visibility: hidden;
+
+  &:before {
+    background: black;
+    border: 1px solid lightgray;
+    content: "\00a0";
+    display: inline-block;
+    height: 16px;
+    margin: 0 .25em 0 0;
+    padding: 0;
+    vertical-align: top;
+    width: 16px;
+  }
 `
 
 const Label = styled.span`
   color: lightgray;
 `
 
+const SignUpLink = styled(Link)`
+  text-decoration: none;
+  color: lightblue;
+  text-align: right;
+  font-size: 12px;
+  margin-top: 0px;
+`
+
+const Advertising = styled.p`
+  color: lightgray;
+  font-size: 12px;
+  margin-top: 30px;
+`
+
 
 export { 
   Form,
   Input, 
-  InputContainer, 
+  FlexContainer, 
   Button, 
   Logo, 
   LogoContainer, 
@@ -88,5 +115,7 @@ export {
   Error, 
   Checkbox, 
   Label, 
-  CheckboxContainer 
+  CheckboxContainer,
+  SignUpLink,
+  Advertising
 };
