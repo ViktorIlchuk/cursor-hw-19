@@ -1,25 +1,59 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
+import { connect } from "react-redux";
 import { Link, Redirect } from 'react-router-dom';
+import { changeIsLogged } from "../redux/actions";
+import { Card, Logo, Form, Input, Button, Error, LogoContainer, Checkbox, Label } from '../components/AuthForm';
 import logoImg from "../img/padlock.png";
-import { Card, Logo, Form, Input, Button, Error, LogoContainer } from '../components/AuthForm';
-import { useAuth } from "../context/auth";
-import { useLogin } from "../context/login";
 
-function Login() {
-    const {setIsLoggedIn} = useLogin();
-    const {isLoggedIn} = useLogin();
+const initialValues = {
+    email: '',
+    password: ''
+}
+
+function Login({isLoggedIn, changeIsLogged, authTokens}) {
     const [isError, setIsError] = useState(false);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const {authTokens} = useAuth();
+    const [rememberUser, setRememberUser] = useState(false)
+    const [values, setValues] = useState(initialValues);
 
-    const loginHandler = () => {
-        const currentToken = `${email}${password}`;
-        if(authTokens.tokens.includes(currentToken)) {
-            setIsLoggedIn(true)
+    useEffect(() => {
+        const rememberUser = localStorage.getItem('rememberUser') === 'true';
+        const email = rememberUser ? localStorage.getItem('email') : '';
+        const password = rememberUser ? localStorage.getItem('password') : '';
+        setValues({
+            email,
+            password
+        });
+    }, [])
+
+    const loginHandler = event => {
+        event.preventDefault();
+        localStorage.setItem('rememberUser', rememberUser);
+        localStorage.setItem('email', rememberUser ? values.email : '');
+        localStorage.setItem('password', rememberUser ? values.password : '');
+        const currentToken = `${values.email}_${values.password}`;
+        const hasAccess = authTokens.includes(currentToken);
+
+        if(hasAccess) {
+            changeIsLogged(!isLoggedIn)
+            setValues({
+                email: '',
+                password: ''
+            });
+        }
+
+        if(!hasAccess){
+            setIsError(true);
         }
     }
-    
+
+    const handleInputChange = event => {
+        const {name, value} = event.target;
+        setValues({
+          ...values,
+          [name]: value
+        })
+      }
+
     if(isLoggedIn) {
         return <Redirect to="/main" />;
     }
@@ -31,25 +65,45 @@ function Login() {
                 <Logo src={logoImg} />
             </LogoContainer>
             <h1>Login</h1>
-            <Form>
+            <Form onSubmit={loginHandler}>
                 <Input
+                    name="email"
                     type="email"
                     placeholder="email"
-                    value={email}
-                    onChange={ e => setEmail(e.target.value)}
+                    value={values.email}
+                    onChange={handleInputChange}
                 />
                 <Input
+                    name="password"
                     type="password"
                     placeholder="password"
-                    value={password}
-                    onChange={ e => setPassword(e.target.value)}
+                    value={values.password}
+                    onChange={handleInputChange}
                 />
-                <Button onClick={loginHandler} >Sign In</Button>
+                <Label>
+                    <Checkbox
+                        type='checkbox'                       
+                        onChange={() => setRememberUser(!rememberUser)}
+                    />
+                    <span>Remember me</span>
+                </Label>
+                <Button type='submit' >Sign In</Button>
             </Form>
-            <Link to="/signup">Don't have an account?</Link>
+            <Link to="#">Forgot password?</Link>
+            <Link to="/signup">Don't have an account? Sigh Up</Link>
             { isError &&<Error>The username or password provided were incorrect!</Error> }
         </Card>
     )
 };
 
-export default Login;
+const mapStateToProps = state => ({
+    isLoggedIn: state.auth.isLoggedIn,
+    authTokens: state.auth.authTokens
+})
+
+// const mapDispatchToProps = {
+//     changeIsLogged,
+//     addToken
+// }
+
+export default connect(mapStateToProps, {changeIsLogged})(Login);

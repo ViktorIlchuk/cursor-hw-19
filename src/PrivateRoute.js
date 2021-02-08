@@ -1,12 +1,10 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { useAuth } from './context/auth';
+import {connect} from 'react-redux';
 
-function PrivateRoute({ component: Component, ...rest}) {
-    const isAuthenticated = useAuth();
-    
+function PrivateRoute({ component: Component, isLoggedIn, ...rest}) {
     return (
-        <Route {...rest} render={(props) => isAuthenticated ? (
+        <Route {...rest} render={(props) => isLoggedIn ? (
             <Component {...props} />
         ) : (
             <Redirect to='/' />
@@ -15,4 +13,4 @@ function PrivateRoute({ component: Component, ...rest}) {
     )
 }
 
-export default PrivateRoute
+export default PrivateRoute;

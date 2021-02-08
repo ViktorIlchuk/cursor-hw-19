@@ -1,11 +1,9 @@
 import React from "react";
 import { Redirect } from 'react-router-dom';
-import { useLogin } from "../context/login";
+import {connect} from 'react-redux';
+import { changeIsLogged } from "../redux/actions";
 
-function Main(props) {
-  const { setIsLoggedIn } = useLogin();
-  const { isLoggedIn } = useLogin()
-
+function Main({isLoggedIn, changeIsLogged}) {
   if (!isLoggedIn) {
     return <Redirect to="/" />;
   }
@@ -13,9 +11,11 @@ function Main(props) {
   return (
     <div>
       <h1>Main Page</h1>
-        <button onClick={() => setIsLoggedIn(false)} >Logout</button>
+        <button onClick={() => changeIsLogged(!isLoggedIn)}>Logout</button>
     </div>
   );
 }
 
-export default Main;
+const mapStateToProps = state => ({isLoggedIn: state.auth.isLoggedIn})
+
+export default connect(mapStateToProps, {changeIsLogged})(Main);

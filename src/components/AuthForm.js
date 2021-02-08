@@ -20,6 +20,10 @@ const InputContainer = styled.div`
   justify-content: space-between;
 `
 
+const CheckboxContainer = styled.div`
+  display: flex;
+`
+
 const Input = styled.input`
   width: ${props =>(props.signup ? "48%" : "100%")};
   padding: 1rem;
@@ -63,4 +67,26 @@ const Error = styled.div`
   background-color: red;
 `;
 
-export { Form, Input, InputContainer, Button, Logo, LogoContainer, Card, Error };
+const Checkbox = styled.input`
+ background-color: black;
+ border: 1px solid lightgray;
+`
+
+const Label = styled.span`
+  color: lightgray;
+`
+
+
+export { 
+  Form,
+  Input, 
+  InputContainer, 
+  Button, 
+  Logo, 
+  LogoContainer, 
+  Card, 
+  Error, 
+  Checkbox, 
+  Label, 
+  CheckboxContainer 
+};
